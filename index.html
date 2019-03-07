@@ -115,7 +115,7 @@
 					<nav class="header-nav">
 						<div class="social">
 							
-								<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng.github.io" title="github">github</a>
+								<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng77.github.io" title="github">github</a>
 					        
 								<a class="mail" target="_blank" href="/438524651@qq.com" title="mail">mail</a>
 					        
@@ -126,7 +126,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/MapReduce/" style="font-size: 10px;">MapReduce</a> <a href="/tags/PTA/" style="font-size: 20px;">PTA</a> <a href="/tags/poj/" style="font-size: 10px;">poj</a> <a href="/tags/图论/" style="font-size: 10px;">图论</a> <a href="/tags/堆/" style="font-size: 10px;">堆</a> <a href="/tags/广度优先搜索/" style="font-size: 10px;">广度优先搜索</a> <a href="/tags/最小区间覆盖/" style="font-size: 10px;">最小区间覆盖</a> <a href="/tags/最短路问题/" style="font-size: 10px;">最短路问题</a> <a href="/tags/深度优先搜索/" style="font-size: 10px;">深度优先搜索</a> <a href="/tags/计算几何/" style="font-size: 10px;">计算几何</a> <a href="/tags/贪心算法/" style="font-size: 10px;">贪心算法</a>
+						<a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/MapReduce/" style="font-size: 20px;">MapReduce</a> <a href="/tags/PTA/" style="font-size: 20px;">PTA</a> <a href="/tags/poj/" style="font-size: 10px;">poj</a> <a href="/tags/图论/" style="font-size: 10px;">图论</a> <a href="/tags/堆/" style="font-size: 10px;">堆</a> <a href="/tags/广度优先搜索/" style="font-size: 10px;">广度优先搜索</a> <a href="/tags/最小区间覆盖/" style="font-size: 10px;">最小区间覆盖</a> <a href="/tags/最短路问题/" style="font-size: 10px;">最短路问题</a> <a href="/tags/深度优先搜索/" style="font-size: 10px;">深度优先搜索</a> <a href="/tags/计算几何/" style="font-size: 10px;">计算几何</a> <a href="/tags/贪心算法/" style="font-size: 10px;">贪心算法</a>
 					</div>
 				</section>
 				
@@ -177,7 +177,7 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng.github.io" title="github">github</a>
+						<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng77.github.io" title="github">github</a>
 			        
 						<a class="mail" target="_blank" href="/438524651@qq.com" title="mail">mail</a>
 			        
@@ -187,6 +187,77 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-WordCount" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/03/07/WordCount/" class="article-date">
+  	<time datetime="2019-03-07T14:58:29.000Z" itemprop="datePublished">2019-03-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/07/WordCount/">
+        WordCount
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="MapReduce之词频统计"><a href="#MapReduce之词频统计" class="headerlink" title="MapReduce之词频统计"></a>MapReduce之词频统计</h1><p>  这次终于开始了这是的MapReduce的编码过程，记录以下</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>   编写MapReduce对一个文本中单词的使用频率进行统计</p>
+<h4 id="样例输入"><a href="#样例输入" class="headerlink" title="样例输入"></a>样例输入</h4><p> hello world<br> hello hadoop<br> hello mapreduce<br> hello spark<br> hello school</p>
+<h4 id="输出结果"><a href="#输出结果" class="headerlink" title="输出结果"></a>输出结果</h4><p>hadoop    1<br>hello    5<br>mapreduce    1<br>school    1<br>spark    1<br>world    1</p>
+<h2 id="问题思路"><a href="#问题思路" class="headerlink" title="问题思路"></a>问题思路</h2><p>   在这个问题中，将文本中的内容切割为每一个单词，然后将相同的单词聚集在一起，最后计算此书并输出</p>
+<h3 id="map阶段任务"><a href="#map阶段任务" class="headerlink" title="map阶段任务"></a>map阶段任务</h3><p>   在这个问题中，map阶段主要负责单词切割任务。</p>
+<h4 id="map阶段的工作原理"><a href="#map阶段的工作原理" class="headerlink" title="map阶段的工作原理"></a>map阶段的工作原理</h4><p>   Mapper处理的数据是由InputFormat分解过的数据集，其中InputFormat的作用是将数据集切割成小数据集InputSplits,每一个InputSplit将由一个Mapper负责处理，此外，InputFormat中还提供了一个RecordReader的实现，并将一个InputSolit解析成&lt; key,value&gt;对提供给map函数。</p>
+<h4 id="map阶段源码如下"><a href="#map阶段源码如下" class="headerlink" title="map阶段源码如下"></a>map阶段源码如下</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static class TokenizerMapper</span><br><span class="line">           extends Mapper&lt;Object, Text, Text, IntWritable&gt; &#123;</span><br><span class="line"></span><br><span class="line">       private final static IntWritable one = new IntWritable(1);</span><br><span class="line">       private Text word = new Text();</span><br><span class="line"></span><br><span class="line">       public void map(Object key, Text value, Context context</span><br><span class="line">       ) throws IOException, InterruptedException &#123;</span><br><span class="line">           StringTokenizer itr = new StringTokenizer(value.toString());</span><br><span class="line">           while (itr.hasMoreTokens()) &#123;</span><br><span class="line">               word.set(itr.nextToken());</span><br><span class="line">               context.write(word, one);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="reduce阶段任务"><a href="#reduce阶段任务" class="headerlink" title="reduce阶段任务"></a>reduce阶段任务</h3><p>   reduce阶段主要是接收map结算的单词分组，然后对单词进行统计。</p>
+<h4 id="reduce阶段工作原理"><a href="#reduce阶段工作原理" class="headerlink" title="reduce阶段工作原理"></a>reduce阶段工作原理</h4><p>  Mapper中传递的数据为的结果对&lt;key,value&gt;，会送到Reducer中进行合并，合并的过程中，有相同的key的键/值对则送到同一个Reducer上，并由reduce具体计算出单词所对应的频数。</p>
+<h4 id="reduce阶段源码如下"><a href="#reduce阶段源码如下" class="headerlink" title="reduce阶段源码如下"></a>reduce阶段源码如下</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static class IntSumReducer</span><br><span class="line">            extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt; &#123;</span><br><span class="line">        private IntWritable result = new IntWritable();</span><br><span class="line"></span><br><span class="line">        public void reduce(Text key, Iterable&lt;IntWritable&gt; values,</span><br><span class="line">                           Context context</span><br><span class="line">        ) throws IOException, InterruptedException &#123;</span><br><span class="line">            int sum = 0;</span><br><span class="line">            for (IntWritable val : values) &#123;</span><br><span class="line">                sum += val.get();</span><br><span class="line">            &#125;</span><br><span class="line">            result.set(sum);</span><br><span class="line">            context.write(key, result);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="完整代码如下"><a href="#完整代码如下" class="headerlink" title="完整代码如下"></a>完整代码如下</h3><p>在运行代码之前，我们需要在该项目之下建立一个input文件夹，在input文件夹下建立一个文本文件，存放用来处理的单词。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.hadoop.conf.Configuration;</span><br><span class="line">import org.apache.hadoop.fs.Path;</span><br><span class="line">import org.apache.hadoop.io.IntWritable;</span><br><span class="line">import org.apache.hadoop.io.Text;</span><br><span class="line">import org.apache.hadoop.mapreduce.Job;</span><br><span class="line">import org.apache.hadoop.mapreduce.Mapper;</span><br><span class="line">import org.apache.hadoop.mapreduce.Reducer;</span><br><span class="line">import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span><br><span class="line">import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.util.StringTokenizer;</span><br><span class="line"></span><br><span class="line">public class WordCount &#123;</span><br><span class="line"></span><br><span class="line">    public static class TokenizerMapper</span><br><span class="line">            extends Mapper&lt;Object, Text, Text, IntWritable&gt; &#123;</span><br><span class="line"></span><br><span class="line">        private final static IntWritable one = new IntWritable(1);</span><br><span class="line">        private Text word = new Text();</span><br><span class="line"></span><br><span class="line">        public void map(Object key, Text value, Context context</span><br><span class="line">        ) throws IOException, InterruptedException &#123;</span><br><span class="line">            StringTokenizer itr = new StringTokenizer(value.toString());</span><br><span class="line">            while (itr.hasMoreTokens()) &#123;</span><br><span class="line">                word.set(itr.nextToken());</span><br><span class="line">                context.write(word, one);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static class IntSumReducer</span><br><span class="line">            extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt; &#123;</span><br><span class="line">        private IntWritable result = new IntWritable();</span><br><span class="line"></span><br><span class="line">        public void reduce(Text key, Iterable&lt;IntWritable&gt; values,</span><br><span class="line">                           Context context</span><br><span class="line">        ) throws IOException, InterruptedException &#123;</span><br><span class="line">            int sum = 0;</span><br><span class="line">            for (IntWritable val : values) &#123;</span><br><span class="line">                sum += val.get();</span><br><span class="line">            &#125;</span><br><span class="line">            result.set(sum);</span><br><span class="line">            context.write(key, result);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        Configuration conf = new Configuration();</span><br><span class="line">        String[] otherArgs = new String[]&#123;&quot;input/file.txt&quot;, &quot;output&quot;&#125;;   //input/file.txt便是的</span><br><span class="line">        if (otherArgs.length != 2) &#123;</span><br><span class="line">            System.out.println(&quot;参数错误&quot;);</span><br><span class="line">            System.exit(2);</span><br><span class="line">        &#125;</span><br><span class="line">        Job job = Job.getInstance(conf, &quot;word count&quot;);</span><br><span class="line">        job.setJarByClass(WordCount.class);</span><br><span class="line">        job.setMapperClass(TokenizerMapper.class);</span><br><span class="line">        job.setCombinerClass(IntSumReducer.class);</span><br><span class="line">        job.setReducerClass(IntSumReducer.class);</span><br><span class="line">        job.setOutputKeyClass(Text.class);</span><br><span class="line">        job.setOutputValueClass(IntWritable.class);</span><br><span class="line">        FileInputFormat.addInputPath(job, new Path(otherArgs[0]));</span><br><span class="line">        FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));</span><br><span class="line">        System.exit(job.waitForCompletion(true) ? 0 : 1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p> 毕竟如上的输入数据比较少，大家可以动手查找自然语言处理的语料包添加到input文件中，感受以下大数据的魅力</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MapReduce/">MapReduce</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="[post]-2019-3-1" class="article article-type-[post]" itemscope itemprop="blogPost">
   
