@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>MyBatis的关系映射——多对多 | rootdeng的博客</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="# MyBatis的关系映射——多对多 多对多的关系在A类中定义B类类型的集合，在B类中定义A类类型的集合 这次的博客直接在上一篇MyBatis的关系映射——一对多的基础上写，直接添加相关文件就可以1、创建相关数据库123456789101112131415161718create table tb_product(id int(32) primary key auto_increment,na">
+<meta name="keywords" content="Spring,后端,Mybatis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyBatis的关系映射——多对多">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/csdn-export-md/index.html">
+<meta property="og:site_name" content="rootdeng的博客">
+<meta property="og:description" content="# MyBatis的关系映射——多对多 多对多的关系在A类中定义B类类型的集合，在B类中定义A类类型的集合 这次的博客直接在上一篇MyBatis的关系映射——一对多的基础上写，直接添加相关文件就可以1、创建相关数据库123456789101112131415161718create table tb_product(id int(32) primary key auto_increment,na">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331180806264.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190331181319183.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW5nZHkxMjMwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-03-31T14:39:11.310Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MyBatis的关系映射——多对多">
+<meta name="twitter:description" content="# MyBatis的关系映射——多对多 多对多的关系在A类中定义B类类型的集合，在B类中定义A类类型的集合 这次的博客直接在上一篇MyBatis的关系映射——一对多的基础上写，直接添加相关文件就可以1、创建相关数据库123456789101112131415161718create table tb_product(id int(32) primary key auto_increment,na">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190331180806264.png">
+  
+    <link rel="alternative" href="/atom.xml" title="rootdeng的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+  
+
+  <script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1539877444364&amp;di=194ef2ced171f80307eb7c974f561646&amp;imgtype=0&amp;src=http%3A%2F%2Fimgm.gmw.cn%2Fattachement%2Fjpg%2Fsite2%2F20180922%2F125902468397287372.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">#include&lt;deng&gt;</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng77.github.io" title="github">github</a>
+					        
+								<a class="mail" target="_blank" href="/438524651@qq.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/MapReduce/" style="font-size: 10px;">MapReduce</a> <a href="/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/tags/Mybatis/" style="font-size: 16.67px;">Mybatis</a> <a href="/tags/PTA/" style="font-size: 13.33px;">PTA</a> <a href="/tags/Spring/" style="font-size: 20px;">Spring</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/poj/" style="font-size: 13.33px;">poj</a> <a href="/tags/后端/" style="font-size: 16.67px;">后端</a> <a href="/tags/图论/" style="font-size: 10px;">图论</a> <a href="/tags/堆/" style="font-size: 10px;">堆</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/广度优先搜索/" style="font-size: 10px;">广度优先搜索</a> <a href="/tags/数据挖掘/" style="font-size: 13.33px;">数据挖掘</a> <a href="/tags/最小区间覆盖/" style="font-size: 10px;">最小区间覆盖</a> <a href="/tags/最短路问题/" style="font-size: 10px;">最短路问题</a> <a href="/tags/深度优先搜索/" style="font-size: 10px;">深度优先搜索</a> <a href="/tags/计算几何/" style="font-size: 10px;">计算几何</a> <a href="/tags/贪心算法/" style="font-size: 10px;">贪心算法</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://xuhacker.me/">佳叙的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">#include&lt;deng&gt;</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1539877444364&amp;di=194ef2ced171f80307eb7c974f561646&amp;imgtype=0&amp;src=http%3A%2F%2Fimgm.gmw.cn%2Fattachement%2Fjpg%2Fsite2%2F20180922%2F125902468397287372.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">#include&lt;deng&gt;</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng77.github.io" title="github">github</a>
+			        
+						<a class="mail" target="_blank" href="/438524651@qq.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="[layout]-csdn-export-md" class="article article-type-[layout]" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/03/31/csdn-export-md/" class="article-date">
+  	<time datetime="2019-03-31T14:31:05.000Z" itemprop="datePublished">2019-03-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MyBatis的关系映射——多对多
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mybatis/">Mybatis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/后端/">后端</a></li></ul>
+	</div>
+
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>﻿# MyBatis的关系映射——多对多</p>
+<h2 id="多对多的关系"><a href="#多对多的关系" class="headerlink" title="多对多的关系"></a>多对多的关系</h2><p>在A类中定义B类类型的集合，在B类中定义A类类型的集合</p>
+<h6 id="这次的博客直接在上一篇MyBatis的关系映射——一对多的基础上写，直接添加相关文件就可以"><a href="#这次的博客直接在上一篇MyBatis的关系映射——一对多的基础上写，直接添加相关文件就可以" class="headerlink" title="这次的博客直接在上一篇MyBatis的关系映射——一对多的基础上写，直接添加相关文件就可以"></a>这次的博客直接在上一篇<a href="https://blog.csdn.net/zhangdy12307/article/details/88932470" target="_blank" rel="noopener">MyBatis的关系映射——一对多</a>的基础上写，直接添加相关文件就可以</h6><h3 id="1、创建相关数据库"><a href="#1、创建相关数据库" class="headerlink" title="1、创建相关数据库"></a>1、创建相关数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">create table tb_product(</span><br><span class="line">id int(32) primary key auto_increment,</span><br><span class="line">name varchar(32),</span><br><span class="line">price double</span><br><span class="line">);</span><br><span class="line">insert into tb_product values (&apos;1&apos;,&apos;Java fundment&apos;,&apos;44.5&apos;);</span><br><span class="line">insert into tb_product values (&apos;2&apos;,&apos;Java Web fundment&apos;,&apos;38.5&apos;);</span><br><span class="line">insert into tb_product values (&apos;3&apos;,&apos;SSM prictence&apos;,&apos;50&apos;);</span><br><span class="line">create table tb_ordersitem(</span><br><span class="line">id int(32) primary key auto_increment,</span><br><span class="line">orders_id int(32),</span><br><span class="line">product_id int(32),</span><br><span class="line">foreign key(orders_id) references tb_orders(id),</span><br><span class="line">foreign key(product_id) references tb_product(id)</span><br><span class="line">);</span><br><span class="line">insert into tb_ordersitem values (&apos;1&apos;,&apos;1&apos;,&apos;1&apos;);</span><br><span class="line">insert into tb_ordersitem values (&apos;2&apos;,&apos;1&apos;,&apos;3&apos;);</span><br><span class="line">insert into tb_ordersitem values (&apos;3&apos;,&apos;3&apos;,&apos;3&apos;);</span><br></pre></td></tr></table></figure>
+<h3 id="2、在com-po包中创建类Product并重写Orders类"><a href="#2、在com-po包中创建类Product并重写Orders类" class="headerlink" title="2、在com.po包中创建类Product并重写Orders类"></a>2、在com.po包中创建类Product并重写Orders类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">package com.po;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class Product &#123;</span><br><span class="line">    private Integer id;</span><br><span class="line">    private String username;</span><br><span class="line">    private Double price;</span><br><span class="line">    private List&lt;Orders&gt; orders;</span><br><span class="line"></span><br><span class="line">    public Integer getId() &#123;</span><br><span class="line">        return id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setId(Integer id) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getUsername() &#123;</span><br><span class="line">        return username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setUsername(String username) &#123;</span><br><span class="line">        this.username = username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Double getPrice() &#123;</span><br><span class="line">        return price;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setPrice(Double price) &#123;</span><br><span class="line">        this.price = price;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;Orders&gt; getOrders() &#123;</span><br><span class="line">        return orders;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setOrders(List&lt;Orders&gt; orders) &#123;</span><br><span class="line">        this.orders = orders;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;Product&#123;&quot; +</span><br><span class="line">                &quot;id=&quot; + id +</span><br><span class="line">                &quot;, username=&apos;&quot; + username + &apos;\&apos;&apos; +</span><br><span class="line">                &quot;, price=&quot; + price +</span><br><span class="line">                &quot;, orders=&quot; + orders +</span><br><span class="line">                &apos;&#125;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重写Orders类的主要目的是为了方便查看数据结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">package com.po;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class Orders &#123;</span><br><span class="line">    private Integer id;    </span><br><span class="line">    private String number;</span><br><span class="line">    private List&lt;Product&gt; productList;</span><br><span class="line"></span><br><span class="line">    public Integer getId() &#123;</span><br><span class="line">        return id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setId(Integer id) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getNumber() &#123;</span><br><span class="line">        return number;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setNumber(String number) &#123;</span><br><span class="line">        this.number = number;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public List&lt;Product&gt; getProductList() &#123;</span><br><span class="line">        return productList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setProductList(List&lt;Product&gt; productList) &#123;</span><br><span class="line">        this.productList = productList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;Orders&#123;&quot; +</span><br><span class="line">                &quot;id=&quot; + id +</span><br><span class="line">                &quot;, number=&apos;&quot; + number + &apos;\&apos;&apos; +</span><br><span class="line">                &quot;, productList=&quot; + productList +</span><br><span class="line">                &apos;&#125;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3、在com-mapper中创建实体映射文件OrdersMapper-xml和商品实体映射文件ProductMapper-xml"><a href="#3、在com-mapper中创建实体映射文件OrdersMapper-xml和商品实体映射文件ProductMapper-xml" class="headerlink" title="3、在com.mapper中创建实体映射文件OrdersMapper.xml和商品实体映射文件ProductMapper.xml"></a>3、在com.mapper中创建实体映射文件OrdersMapper.xml和商品实体映射文件ProductMapper.xml</h3><h6 id="OrdersMapper-xml如下所示"><a href="#OrdersMapper-xml如下所示" class="headerlink" title="OrdersMapper.xml如下所示"></a>OrdersMapper.xml如下所示</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; </span><br><span class="line">     &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span><br><span class="line">&lt;mapper namespace=&quot;com.mapper.OrdersMapper&quot;&gt;</span><br><span class="line">	&lt;!-- 多对多嵌套查询：通过执行另外一条SQL映射语句来返回预期的特殊类型 --&gt;</span><br><span class="line">	&lt;select id=&quot;findOrdersWithProduct&quot; parameterType=&quot;Integer&quot;</span><br><span class="line">              resultMap=&quot;OrdersWithProductResult&quot;&gt;</span><br><span class="line">		select * from tb_orders WHERE id=#&#123;id&#125;	</span><br><span class="line">	&lt;/select&gt;</span><br><span class="line">	&lt;resultMap type=&quot;Orders&quot; id=&quot;OrdersWithProductResult&quot;&gt;</span><br><span class="line">		&lt;id property=&quot;id&quot; column=&quot;id&quot; /&gt;</span><br><span class="line">		&lt;result property=&quot;number&quot; column=&quot;number&quot; /&gt;</span><br><span class="line">		&lt;collection property=&quot;productList&quot; column=&quot;id&quot; ofType=&quot;Product&quot; </span><br><span class="line">		     select=&quot;com.mapper.ProductMapper.findProductById&quot;&gt;</span><br><span class="line">		&lt;/collection&gt;</span><br><span class="line">	&lt;/resultMap&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;!-- 多对多嵌套结果查询：查询某订单及其关联的商品详情 --&gt;</span><br><span class="line">	&lt;select id=&quot;findOrdersWithPorduct2&quot; parameterType=&quot;Integer&quot; </span><br><span class="line">	         resultMap=&quot;OrdersWithPorductResult2&quot;&gt;</span><br><span class="line">	    select o.*,p.id as pid,p.name,p.price</span><br><span class="line">	    from tb_orders o,tb_product p,tb_ordersitem  oi</span><br><span class="line">	    WHERE oi.orders_id=o.id </span><br><span class="line">	    and oi.product_id=p.id </span><br><span class="line">	    and o.id=#&#123;id&#125;</span><br><span class="line">	&lt;/select&gt;</span><br><span class="line">	&lt;!-- 自定义手动映射类型 --&gt;</span><br><span class="line">	&lt;resultMap type=&quot;Orders&quot; id=&quot;OrdersWithPorductResult2&quot;&gt;</span><br><span class="line">	    &lt;id property=&quot;id&quot; column=&quot;id&quot; /&gt;</span><br><span class="line">	    &lt;result property=&quot;number&quot; column=&quot;number&quot; /&gt;</span><br><span class="line">	    &lt;!-- 多对多关联映射：collection --&gt;</span><br><span class="line">	    &lt;collection property=&quot;productList&quot; ofType=&quot;Product&quot;&gt;</span><br><span class="line">	        &lt;id property=&quot;id&quot; column=&quot;pid&quot; /&gt;</span><br><span class="line">	        &lt;result property=&quot;name&quot; column=&quot;name&quot; /&gt;</span><br><span class="line">	        &lt;result property=&quot;price&quot; column=&quot;price&quot; /&gt;</span><br><span class="line">	    &lt;/collection&gt;</span><br><span class="line">	&lt;/resultMap&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
+<h6 id="ProductMapper-xml如下所示"><a href="#ProductMapper-xml如下所示" class="headerlink" title="ProductMapper.xml如下所示"></a>ProductMapper.xml如下所示</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span><br><span class="line">     &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span><br><span class="line">&lt;mapper namespace=&quot;com.mapper.ProductMapper&quot;&gt;</span><br><span class="line">	&lt;select id=&quot;findProductById&quot; parameterType=&quot;Integer&quot; </span><br><span class="line">                                       resultType=&quot;Product&quot;&gt;</span><br><span class="line">		SELECT * from tb_product where id IN(</span><br><span class="line">		   SELECT product_id FROM tb_ordersitem  WHERE orders_id = #&#123;id&#125;</span><br><span class="line">		)</span><br><span class="line">	&lt;/select&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="4、将新创建的映射文件的文件路径添加到配置文件Mybatis-config-xml中"><a href="#4、将新创建的映射文件的文件路径添加到配置文件Mybatis-config-xml中" class="headerlink" title="4、将新创建的映射文件的文件路径添加到配置文件Mybatis-config.xml中"></a>4、将新创建的映射文件的文件路径添加到配置文件Mybatis-config.xml中</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapper resource=&quot;com/mapper/OrdersMapper.xml&quot; /&gt;</span><br><span class="line">&lt;mapper resource=&quot;com/mapper/ProductMapper.xml&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="5、在测试类中编写多对多关联查询的测试方法findOrdersTest"><a href="#5、在测试类中编写多对多关联查询的测试方法findOrdersTest" class="headerlink" title="5、在测试类中编写多对多关联查询的测试方法findOrdersTest()"></a>5、在测试类中编写多对多关联查询的测试方法findOrdersTest()</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void findOrdersTest()&#123;</span><br><span class="line">    SqlSession session=MybatisUtils.getSession();</span><br><span class="line">    Orders orders=session.selectOne(&quot;com.mapper.&quot;+&quot;OrdersMapper.findOrdersWithProduct&quot;,1);</span><br><span class="line">    System.out.println(orders);</span><br><span class="line">    session.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下<br><img src="https://img-blog.csdnimg.cn/20190331180806264.png" alt="在这里插入图片描述"></p>
+<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><p>在这次过程中遇到如下问题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">org.apache.ibatis.exceptions.PersistenceException: </span><br><span class="line">### Error querying database.  Cause: java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.mapper.OrdersMapper.findOrdersWithProduct</span><br><span class="line">### Cause: java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.mapper.OrdersMapper.findOrdersWithProduct</span><br><span class="line"></span><br><span class="line">	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)</span><br><span class="line">	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:150)</span><br><span class="line">	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)</span><br><span class="line">	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:77)</span><br><span class="line">	at com.test.MybatisAssociatedTest.findOrdersTest(MybatisAssociatedTest.java:36)</span><br><span class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)</span><br><span class="line">	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)</span><br><span class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</span><br><span class="line">	at java.lang.reflect.Method.invoke(Method.java:498)</span><br><span class="line">	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)</span><br><span class="line">	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)</span><br><span class="line">	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)</span><br><span class="line">	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)</span><br><span class="line">	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)</span><br><span class="line">	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)</span><br><span class="line">	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)</span><br><span class="line">	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)</span><br><span class="line">	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)</span><br><span class="line">	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)</span><br><span class="line">	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)</span><br><span class="line">	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)</span><br><span class="line">	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)</span><br><span class="line">	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)</span><br><span class="line">	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)</span><br><span class="line">	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)</span><br><span class="line">	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)</span><br><span class="line">	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)</span><br><span class="line">Caused by: java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.mapper.OrdersMapper.findOrdersWithProduct</span><br><span class="line">	at org.apache.ibatis.session.Configuration$StrictMap.get(Configuration.java:933)</span><br><span class="line">	at org.apache.ibatis.session.Configuration.getMappedStatement(Configuration.java:726)</span><br><span class="line">	at org.apache.ibatis.session.Configuration.getMappedStatement(Configuration.java:719)</span><br><span class="line">	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)</span><br><span class="line">	... 25 more</span><br></pre></td></tr></table></figure></p>
+<p>看到报错提示一直以为是数据库访问出现问题，删掉数据库重写一遍发现问题仍然存在，然后一直检查com.mapper.OrdersMapper.findOrdersWithProduct文档中的代码段发现并没有什么问题，谷歌了很多方案也并没有解决掉，当时放弃了，在看了几集《星际迷航：发现号》之后猛然发现这个地方出了问题<br><img src="https://img-blog.csdnimg.cn/20190331181319183.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW5nZHkxMjMwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">应该是 id=”findOrdersWithProductResult” 结果成了 id=”findrOdersWithProduct” 改掉之后运行成功</p>
+<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>需要找一个开源项目好好练习，可以做一个二手商城交易系统，然后以此为蓝本再做一个推荐系统的小项目出来。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/03/31/Python数据挖掘入门与实践-亲和性分析/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          Python数据挖掘入门与实践--亲和性分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/31/Mybatis初识/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Mybatis初识</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="csdn-export-md" data-title="MyBatis的关系映射——多对多" data-url="http://yoursite.com/2019/03/31/csdn-export-md/"  data-images="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1539877444364&amp;di=194ef2ced171f80307eb7c974f561646&amp;imgtype=0&amp;src=http%3A%2F%2Fimgm.gmw.cn%2Fattachement%2Fjpg%2Fsite2%2F20180922%2F125902468397287372.jpg" data-content="MyBatis的关系映射——多对多">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2019 #include&lt;deng&gt;
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Mybatis初识 | rootdeng的博客</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="# Mybatis初识mybatis是一个支持普通sql查询，训处过程及高级映射的持久层框架，几乎消除了所偶的JDBC代码和参数的手动设置以及对结果集的检索，使用简单的XMl或注解进行配置和原始的映射 使用log4j输出日志信息12345678# Global logging configurationlog4j.rootLogger=ERROR, stdout# MyBatis logging">
+<meta name="keywords" content="Spring,后端,Mybatis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis初识">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/Mybatis初识/index.html">
+<meta property="og:site_name" content="rootdeng的博客">
+<meta property="og:description" content="# Mybatis初识mybatis是一个支持普通sql查询，训处过程及高级映射的持久层框架，几乎消除了所偶的JDBC代码和参数的手动设置以及对结果集的检索，使用简单的XMl或注解进行配置和原始的映射 使用log4j输出日志信息12345678# Global logging configurationlog4j.rootLogger=ERROR, stdout# MyBatis logging">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190328113236846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW5nZHkxMjMwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/201903281134137.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190328113511418.png">
+<meta property="og:updated_time" content="2019-03-31T14:34:14.285Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mybatis初识">
+<meta name="twitter:description" content="# Mybatis初识mybatis是一个支持普通sql查询，训处过程及高级映射的持久层框架，几乎消除了所偶的JDBC代码和参数的手动设置以及对结果集的检索，使用简单的XMl或注解进行配置和原始的映射 使用log4j输出日志信息12345678# Global logging configurationlog4j.rootLogger=ERROR, stdout# MyBatis logging">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190328113236846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW5nZHkxMjMwNw==,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternative" href="/atom.xml" title="rootdeng的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+  
+
+  <script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1539877444364&amp;di=194ef2ced171f80307eb7c974f561646&amp;imgtype=0&amp;src=http%3A%2F%2Fimgm.gmw.cn%2Fattachement%2Fjpg%2Fsite2%2F20180922%2F125902468397287372.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">#include&lt;deng&gt;</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng77.github.io" title="github">github</a>
+					        
+								<a class="mail" target="_blank" href="/438524651@qq.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/MapReduce/" style="font-size: 10px;">MapReduce</a> <a href="/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/tags/Mybatis/" style="font-size: 16.67px;">Mybatis</a> <a href="/tags/PTA/" style="font-size: 13.33px;">PTA</a> <a href="/tags/Spring/" style="font-size: 20px;">Spring</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/poj/" style="font-size: 13.33px;">poj</a> <a href="/tags/后端/" style="font-size: 16.67px;">后端</a> <a href="/tags/图论/" style="font-size: 10px;">图论</a> <a href="/tags/堆/" style="font-size: 10px;">堆</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/广度优先搜索/" style="font-size: 10px;">广度优先搜索</a> <a href="/tags/数据挖掘/" style="font-size: 13.33px;">数据挖掘</a> <a href="/tags/最小区间覆盖/" style="font-size: 10px;">最小区间覆盖</a> <a href="/tags/最短路问题/" style="font-size: 10px;">最短路问题</a> <a href="/tags/深度优先搜索/" style="font-size: 10px;">深度优先搜索</a> <a href="/tags/计算几何/" style="font-size: 10px;">计算几何</a> <a href="/tags/贪心算法/" style="font-size: 10px;">贪心算法</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://xuhacker.me/">佳叙的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">#include&lt;deng&gt;</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1539877444364&amp;di=194ef2ced171f80307eb7c974f561646&amp;imgtype=0&amp;src=http%3A%2F%2Fimgm.gmw.cn%2Fattachement%2Fjpg%2Fsite2%2F20180922%2F125902468397287372.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">#include&lt;deng&gt;</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng77.github.io" title="github">github</a>
+			        
+						<a class="mail" target="_blank" href="/438524651@qq.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="[layout]-Mybatis初识" class="article article-type-[layout]" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/03/31/Mybatis初识/" class="article-date">
+  	<time datetime="2019-03-31T14:30:46.000Z" itemprop="datePublished">2019-03-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mybatis初识
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mybatis/">Mybatis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/后端/">后端</a></li></ul>
+	</div>
+
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>﻿# Mybatis初识<br>mybatis是一个支持普通sql查询，训处过程及高级映射的持久层框架，几乎消除了所偶的JDBC代码和参数的手动设置以及对结果集的检索，使用简单的XMl或注解进行配置和原始的映射</p>
+<h2 id="使用log4j输出日志信息"><a href="#使用log4j输出日志信息" class="headerlink" title="使用log4j输出日志信息"></a>使用log4j输出日志信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Global logging configuration</span><br><span class="line">log4j.rootLogger=ERROR, stdout</span><br><span class="line"># MyBatis logging configuration...</span><br><span class="line">log4j.logger.com=DEBUG</span><br><span class="line"># Console output...</span><br><span class="line">log4j.appender.stdout=org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.stdout.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n</span><br></pre></td></tr></table></figure>
+<h2 id="新建com-po包，创建Customer类"><a href="#新建com-po包，创建Customer类" class="headerlink" title="新建com.po包，创建Customer类"></a>新建com.po包，创建Customer类</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"> package com.po;</span><br><span class="line"></span><br><span class="line">public class Customer &#123;</span><br><span class="line">    private Integer id;</span><br><span class="line">    private String username;</span><br><span class="line">    private String jobs;</span><br><span class="line">    private String phone;</span><br><span class="line"></span><br><span class="line">    public Integer getId() &#123;</span><br><span class="line">        return id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setId(Integer id) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getUsername() &#123;</span><br><span class="line">        return username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setUsername(String username) &#123;</span><br><span class="line">        this.username = username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getJobs() &#123;</span><br><span class="line">        return jobs;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setJobs(String jobs) &#123;</span><br><span class="line">        this.jobs = jobs;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getPhone() &#123;</span><br><span class="line">        return phone;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setPhone(String phone) &#123;</span><br><span class="line">        this.phone = phone;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;Customer&#123;&quot; +</span><br><span class="line">                &quot;id=&quot; + id +</span><br><span class="line">                &quot;, username=&apos;&quot; + username + &apos;\&apos;&apos; +</span><br><span class="line">                &quot;, jobs=&apos;&quot; + jobs + &apos;\&apos;&apos; +</span><br><span class="line">                &quot;, phone=&apos;&quot; + phone + &apos;\&apos;&apos; +</span><br><span class="line">                &apos;&#125;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="创建com-mapper包，并在包中创建映射文件CustomerMapper-xml"><a href="#创建com-mapper包，并在包中创建映射文件CustomerMapper-xml" class="headerlink" title="创建com.mapper包，并在包中创建映射文件CustomerMapper.xml"></a>创建com.mapper包，并在包中创建映射文件CustomerMapper.xml</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper</span><br><span class="line">        PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span><br><span class="line">        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span><br><span class="line">&lt;mapper namespace=&quot;com.mapper.CustomerMapper&quot;&gt;</span><br><span class="line">    &lt;!--根据客户编号获取客户信息--&gt;</span><br><span class="line">    &lt;select id=&quot;findCustomerById&quot; parameterType=&quot;Integer&quot; resultType=&quot;com.po.Customer&quot;&gt;</span><br><span class="line">        select * from t_customer where id=#&#123;id&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">     &lt;!--根据客户名称获取客户信息--&gt;</span><br><span class="line">    &lt;select id=&quot;findCustomerByName&quot; parameterType=&quot;String&quot; resultType=&quot;com.po.Customer&quot;&gt;</span><br><span class="line">        select * from t_customer where username like concat(&apos;%&apos;,#&#123;value&#125;,&apos;%&apos;)</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">     &lt;!--插入信息--&gt;</span><br><span class="line">    &lt;insert id=&quot;addCustomer&quot; parameterType=&quot;com.po.Customer&quot;&gt;</span><br><span class="line">        insert into t_customer(username,jobs,phone)</span><br><span class="line">        values(#&#123;username&#125;,#&#123;jobs&#125;,#&#123;phone&#125;)</span><br><span class="line">    &lt;/insert&gt;</span><br><span class="line">     &lt;!--更新客户信息--&gt;</span><br><span class="line">    &lt;update id=&quot;updateCustomer&quot; parameterType=&quot;com.po.Customer&quot;&gt;</span><br><span class="line">        update t_customer set</span><br><span class="line">        username=#&#123;username&#125;,jobs=#&#123;jobs&#125;,phone=#&#123;phone&#125;</span><br><span class="line">        where username=#&#123;username&#125;</span><br><span class="line">    &lt;/update&gt;</span><br><span class="line">     &lt;!--根据客户编号删除客户信息--&gt;</span><br><span class="line">    &lt;delete id=&quot;deleteCustomer&quot; parameterType=&quot;Integer&quot;&gt;</span><br><span class="line">        delete from t_customer where id=#&#123;id&#125;</span><br><span class="line">    &lt;/delete&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="在src目录下创建mybatis的核心配置文件mybatis-config-xml"><a href="#在src目录下创建mybatis的核心配置文件mybatis-config-xml" class="headerlink" title="在src目录下创建mybatis的核心配置文件mybatis-config.xml"></a>在src目录下创建mybatis的核心配置文件mybatis-config.xml</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span><br><span class="line">&lt;!DOCTYPE configuration PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span><br><span class="line">        &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;!--1.配置环境 ，默认的环境id为mysql--&gt;</span><br><span class="line">    &lt;environments default=&quot;mysql&quot;&gt;</span><br><span class="line">        &lt;!--1.2.配置id为mysql的数据库环境 --&gt;</span><br><span class="line">        &lt;environment id=&quot;mysql&quot;&gt;</span><br><span class="line">            &lt;!-- 使用JDBC的事务管理 --&gt;</span><br><span class="line">            &lt;transactionManager type=&quot;JDBC&quot; /&gt;</span><br><span class="line">            &lt;!--数据库连接池 --&gt;</span><br><span class="line">            &lt;dataSource type=&quot;POOLED&quot;&gt;</span><br><span class="line">                &lt;property name=&quot;driver&quot; value=&quot;com.mysql.jdbc.Driver&quot; /&gt;</span><br><span class="line">                &lt;property name=&quot;url&quot;</span><br><span class="line">                          value=&quot;jdbc:mysql://localhost:3306/mybatis&quot; /&gt;</span><br><span class="line">                &lt;property name=&quot;username&quot; value=&quot;root&quot; /&gt;</span><br><span class="line">                &lt;property name=&quot;password&quot; value=&quot;root&quot; /&gt;</span><br><span class="line">            &lt;/dataSource&gt;</span><br><span class="line">        &lt;/environment&gt;</span><br><span class="line">    &lt;/environments&gt;</span><br><span class="line">    &lt;mappers&gt;</span><br><span class="line">        &lt;mapper resource=&quot;com/mapper/CustomerMapper.xml&quot; /&gt;</span><br><span class="line">    &lt;/mappers&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="创建com-test包，编写每个测试类方法"><a href="#创建com-test包，编写每个测试类方法" class="headerlink" title="创建com.test包，编写每个测试类方法"></a>创建com.test包，编写每个测试类方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">package com.test;</span><br><span class="line">import java.io.InputStream;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">import org.apache.ibatis.io.Resources;</span><br><span class="line">import org.apache.ibatis.session.SqlSession;</span><br><span class="line">import org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line">import org.apache.ibatis.session.SqlSessionFactoryBuilder;</span><br><span class="line">import org.junit.Test;</span><br><span class="line">import com.po.Customer;</span><br><span class="line">public class MybatisTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    public void findCustomerByIdTest() throws Exception&#123;</span><br><span class="line">        String resource = &quot;mybatis-config.xml&quot;;</span><br><span class="line">        InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">        SqlSessionFactory sqlSessionFactory=new SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        SqlSession sqlSession=sqlSessionFactory.openSession();</span><br><span class="line">        Customer customer=sqlSession.selectOne(&quot;com.mapper&quot;+&quot;.CustomerMapper.findCustomerById&quot;,2);</span><br><span class="line">        System.out.println(customer.toString());</span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">    @Test</span><br><span class="line">    public void findCustomerByNameTest() throws Exception&#123;</span><br><span class="line">        String resource=&quot;mybatis-config.xml&quot;;</span><br><span class="line">        InputStream inputStream=Resources.getResourceAsStream(resource);</span><br><span class="line">        SqlSessionFactory sqlSessionFactory=new SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        SqlSession sqlSession=sqlSessionFactory.openSession();</span><br><span class="line">        List&lt;Customer&gt; customers=sqlSession.selectList(&quot;com.mapper&quot;+&quot;.CustomerMapper.findCustomerByName&quot;,&quot;r&quot;);</span><br><span class="line">        for(Customer customer:customers)&#123;</span><br><span class="line">            System.out.println(customer);</span><br><span class="line">        &#125;</span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">    @Test</span><br><span class="line">    public void addCustomerTest() throws Exception&#123;</span><br><span class="line">        String resource =&quot;mybatis-config.xml&quot;;</span><br><span class="line">        InputStream inputStream=Resources.getResourceAsStream(resource);</span><br><span class="line">        SqlSessionFactory sqlSessionFactory=new SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        SqlSession sqlSession=sqlSessionFactory.openSession();</span><br><span class="line">        Customer customer=new Customer();</span><br><span class="line">        customer.setUsername(&quot;rose&quot;);</span><br><span class="line">        customer.setJobs(&quot;student&quot;);</span><br><span class="line">        customer.setPhone(&quot;13333533092&quot;);</span><br><span class="line">        int rows=sqlSession.insert(&quot;com.mapper&quot;+&quot;.CustomerMapper.addCustomer&quot;,customer);</span><br><span class="line">        if(rows&gt;0)&#123;</span><br><span class="line">            System.out.println(&quot;您成功插入&quot;+rows+&quot;条数据&quot;);</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            System.out.println(&quot;执行插入操作失败！！！&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        sqlSession.commit();</span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">    @Test</span><br><span class="line">    public void updateCustomerTest() throws Exception&#123;</span><br><span class="line">        String resource=&quot;mybatis-config.xml&quot;;</span><br><span class="line">        InputStream inputStream=Resources.getResourceAsStream(resource);</span><br><span class="line">        SqlSessionFactory sqlSessionFactory=new SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        SqlSession sqlSession=sqlSessionFactory.openSession();</span><br><span class="line">        Customer customer=new Customer();</span><br><span class="line">        customer.setId(4);</span><br><span class="line">        customer.setUsername(&quot;rose&quot;);</span><br><span class="line">        customer.setJobs(&quot;programmer&quot;);</span><br><span class="line">        customer.setPhone(&quot;1331111111&quot;);</span><br><span class="line">        int rows=sqlSession.update(&quot;com.mapper&quot;+&quot;.CustomerMapper.updateCustomer&quot;,customer);</span><br><span class="line">        if(rows&gt;0)&#123;</span><br><span class="line">            System.out.println(&quot;您成功修改了&quot;+rows+&quot;条数据&quot;);</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            System.out.println(&quot;执行修改操作失败！！！&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        sqlSession.commit();</span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">    @Test</span><br><span class="line">    public void deleteCustomerTest() throws Exception&#123;</span><br><span class="line">        String resources=&quot;mybatis-config.xml&quot;;</span><br><span class="line">        InputStream inputStream=Resources.getResourceAsStream(resources);</span><br><span class="line">        SqlSessionFactory sqlSessionFactory= new SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        SqlSession sqlSession=sqlSessionFactory.openSession();</span><br><span class="line">        int rows=sqlSession.delete(&quot;com.mapper&quot;+&quot;.CustomerMapper.deleteCustomer&quot;,4);</span><br><span class="line">        if(rows&gt;0)&#123;</span><br><span class="line">            System.out.println(&quot;你成功删除了&quot;+rows+&quot;条数据&quot;);</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            System.out.println(&quot;执行删除操作失败！！！&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        sqlSession.commit();</span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>在这次学习过程中遇到的问题如下</p>
+<h3 id="一，错误提示java-lang-NoClassDefFoundError-org-hamcrest-SelfDescribing"><a href="#一，错误提示java-lang-NoClassDefFoundError-org-hamcrest-SelfDescribing" class="headerlink" title="一，错误提示java.lang.NoClassDefFoundError:org/hamcrest/SelfDescribing"></a>一，错误提示java.lang.NoClassDefFoundError:org/hamcrest/SelfDescribing</h3><p><img src="https://img-blog.csdnimg.cn/20190328113236846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW5nZHkxMjMwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h5 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h5><p>该错误是由于junit测试中缺少<strong>hamcrest-core.jar</strong>文件所致，添加即可解决问题</p>
+<h3 id="二、查询和删除操作失败"><a href="#二、查询和删除操作失败" class="headerlink" title="二、查询和删除操作失败"></a>二、查询和删除操作失败</h3><p><img src="https://img-blog.csdnimg.cn/201903281134137.png" alt="在这里插入图片描述"></p>
+<h4 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h4><p>先打开数据库，如图所示<br><img src="https://img-blog.csdnimg.cn/20190328113511418.png" alt="在这里插入图片描述"><br>我们发现没有id值为4的数据，因此会出现如下问题，所以我们可以添加一个id=4的数据或者改为按照用户名查询即可，只要符合SQL语法，想怎么该就怎么改。</p>
+<h3 id="三、控制台无法输出SQL语句"><a href="#三、控制台无法输出SQL语句" class="headerlink" title="三、控制台无法输出SQL语句"></a>三、控制台无法输出SQL语句</h3><p>如上图所使<br>这种情况绝对是log4j文件编辑错误，不用想其他问题</p>
+<h3 id="四、插入数据提示成功后数据库中无相关信息"><a href="#四、插入数据提示成功后数据库中无相关信息" class="headerlink" title="四、插入数据提示成功后数据库中无相关信息"></a>四、插入数据提示成功后数据库中无相关信息</h3><p>这中情况一般是由于事务未提交造成的，检查相关代码中是否有事务提交代码段（sqlSession.commit()）</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><h3 id="Mybatis的操作大致可以分为如下几个步骤"><a href="#Mybatis的操作大致可以分为如下几个步骤" class="headerlink" title="Mybatis的操作大致可以分为如下几个步骤"></a>Mybatis的操作大致可以分为如下几个步骤</h3><p>1.读取配置文件<br>2.根据配置文件构建SqlSessionFactory<br>3.通过SqlSessionFactory创建SqlSession<br>4.使用SqlSession对象操作数据库<br>5.关闭Sqlsession</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/03/31/csdn-export-md/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          MyBatis的关系映射——多对多
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/31/MyBatis的关系映射——一对一/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MyBatis的关系映射——一对一</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="Mybatis初识" data-title="Mybatis初识" data-url="http://yoursite.com/2019/03/31/Mybatis初识/"  data-images="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1539877444364&amp;di=194ef2ced171f80307eb7c974f561646&amp;imgtype=0&amp;src=http%3A%2F%2Fimgm.gmw.cn%2Fattachement%2Fjpg%2Fsite2%2F20180922%2F125902468397287372.jpg" data-content="Mybatis初识">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2019 #include&lt;deng&gt;
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>

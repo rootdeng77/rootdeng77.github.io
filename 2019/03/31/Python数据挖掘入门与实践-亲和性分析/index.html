@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Python数据挖掘入门与实践--亲和性分析 | rootdeng的博客</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="# Python数据挖掘入门与实践–亲和性分析 说明这段时间时间找了好多关于数据挖掘方向的数据，不过这些书籍大都偏向理论，看起来也比较枯燥乏味，碰巧今天找到了这本《Python数据挖掘入门与实践》，入门级别，刚好适合我这种爱代码不爱理论的人，从今天开始正式学习数据挖掘。博客中展示的大部分代码都是按照书中的内容编写出来，有些地方会按照自己的思路有一小部分的改动 亲和性分析定义亲和性分析根据样本个体">
+<meta name="keywords" content="数据挖掘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python数据挖掘入门与实践--亲和性分析">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/Python数据挖掘入门与实践-亲和性分析/index.html">
+<meta property="og:site_name" content="rootdeng的博客">
+<meta property="og:description" content="# Python数据挖掘入门与实践–亲和性分析 说明这段时间时间找了好多关于数据挖掘方向的数据，不过这些书籍大都偏向理论，看起来也比较枯燥乏味，碰巧今天找到了这本《Python数据挖掘入门与实践》，入门级别，刚好适合我这种爱代码不爱理论的人，从今天开始正式学习数据挖掘。博客中展示的大部分代码都是按照书中的内容编写出来，有些地方会按照自己的思路有一小部分的改动 亲和性分析定义亲和性分析根据样本个体">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190327154812851.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190327162717302.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190327163339629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW5nZHkxMjMwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190327163603751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW5nZHkxMjMwNw==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-03-31T14:37:11.474Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python数据挖掘入门与实践--亲和性分析">
+<meta name="twitter:description" content="# Python数据挖掘入门与实践–亲和性分析 说明这段时间时间找了好多关于数据挖掘方向的数据，不过这些书籍大都偏向理论，看起来也比较枯燥乏味，碰巧今天找到了这本《Python数据挖掘入门与实践》，入门级别，刚好适合我这种爱代码不爱理论的人，从今天开始正式学习数据挖掘。博客中展示的大部分代码都是按照书中的内容编写出来，有些地方会按照自己的思路有一小部分的改动 亲和性分析定义亲和性分析根据样本个体">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190327154812851.png">
+  
+    <link rel="alternative" href="/atom.xml" title="rootdeng的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xkj1z.com1.z0.glb.clouddn.com/head.jpg">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+  
+
+  <script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1539877444364&amp;di=194ef2ced171f80307eb7c974f561646&amp;imgtype=0&amp;src=http%3A%2F%2Fimgm.gmw.cn%2Fattachement%2Fjpg%2Fsite2%2F20180922%2F125902468397287372.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">#include&lt;deng&gt;</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng77.github.io" title="github">github</a>
+					        
+								<a class="mail" target="_blank" href="/438524651@qq.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/MapReduce/" style="font-size: 10px;">MapReduce</a> <a href="/tags/Mapreduce/" style="font-size: 10px;">Mapreduce</a> <a href="/tags/Mybatis/" style="font-size: 16.67px;">Mybatis</a> <a href="/tags/PTA/" style="font-size: 13.33px;">PTA</a> <a href="/tags/Spring/" style="font-size: 20px;">Spring</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/poj/" style="font-size: 13.33px;">poj</a> <a href="/tags/后端/" style="font-size: 16.67px;">后端</a> <a href="/tags/图论/" style="font-size: 10px;">图论</a> <a href="/tags/堆/" style="font-size: 10px;">堆</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/广度优先搜索/" style="font-size: 10px;">广度优先搜索</a> <a href="/tags/数据挖掘/" style="font-size: 13.33px;">数据挖掘</a> <a href="/tags/最小区间覆盖/" style="font-size: 10px;">最小区间覆盖</a> <a href="/tags/最短路问题/" style="font-size: 10px;">最短路问题</a> <a href="/tags/深度优先搜索/" style="font-size: 10px;">深度优先搜索</a> <a href="/tags/计算几何/" style="font-size: 10px;">计算几何</a> <a href="/tags/贪心算法/" style="font-size: 10px;">贪心算法</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://xuhacker.me/">佳叙的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">#include&lt;deng&gt;</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1539877444364&amp;di=194ef2ced171f80307eb7c974f561646&amp;imgtype=0&amp;src=http%3A%2F%2Fimgm.gmw.cn%2Fattachement%2Fjpg%2Fsite2%2F20180922%2F125902468397287372.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">#include&lt;deng&gt;</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/rootdeng77/rootdeng77.github.io" title="github">github</a>
+			        
+						<a class="mail" target="_blank" href="/438524651@qq.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="[layout]-Python数据挖掘入门与实践-亲和性分析" class="article article-type-[layout]" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/03/31/Python数据挖掘入门与实践-亲和性分析/" class="article-date">
+  	<time datetime="2019-03-31T14:31:28.000Z" itemprop="datePublished">2019-03-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python数据挖掘入门与实践--亲和性分析
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据挖掘/">数据挖掘</a></li></ul>
+	</div>
+
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>﻿# Python数据挖掘入门与实践–亲和性分析</p>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>这段时间时间找了好多关于数据挖掘方向的数据，不过这些书籍大都偏向理论，看起来也比较枯燥乏味，碰巧今天找到了这本《Python数据挖掘入门与实践》，入门级别，刚好适合我这种爱代码不爱理论的人，从今天开始正式学习数据挖掘。<br>博客中展示的大部分代码都是按照书中的内容编写出来，有些地方会按照自己的思路有一小部分的改动</p>
+<h3 id="亲和性分析定义"><a href="#亲和性分析定义" class="headerlink" title="亲和性分析定义"></a>亲和性分析定义</h3><p>亲和性分析根据样本个体（物体）之间的相似度，确定他它们关系的亲疏</p>
+<h3 id="亲和性分析之商品推荐"><a href="#亲和性分析之商品推荐" class="headerlink" title="亲和性分析之商品推荐"></a>亲和性分析之商品推荐</h3><p>这部分内容是通过超市的商品服务的数据集，使得通过商品推荐例子希望得到如下规则：<br>如果一个人购买了商品X，那么他很有可能购买商品Y</p>
+<h4 id="1、在Numpy中加载数据集"><a href="#1、在Numpy中加载数据集" class="headerlink" title="1、在Numpy中加载数据集"></a>1、在Numpy中加载数据集</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">dataset_filename=&quot;affinity_dataset.txt&quot;</span><br><span class="line">X=np.loadtxt(dataset_filename)</span><br></pre></td></tr></table></figure>
+<p>加载完成后我们可以用如下代码查看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(X[:5])</span><br></pre></td></tr></table></figure></p>
+<p>运行结果如下，图中1表示顾客购买了该商品，0表示未购买该商品<br><img src="https://img-blog.csdnimg.cn/20190327154812851.png" alt="加载后的结果如下"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">n_samples,n_features=X.shape     # 记录数据范围</span><br><span class="line">features=[&quot;bread&quot;,&quot;milk&quot;,&quot;cheese&quot;,&quot;apples&quot;,&quot;bananas&quot;] </span><br><span class="line">#features 表示的是每列数据表示的商品</span><br></pre></td></tr></table></figure></p>
+<h4 id="2、实现简单的排序规则"><a href="#2、实现简单的排序规则" class="headerlink" title="2、实现简单的排序规则"></a>2、实现简单的排序规则</h4><p>首先我们需要了解两个基本概念<br><strong>支持度</strong>：指数据集中规则应验的次数。<br><strong>置信度</strong>：衡量规则的准确率。<br>规则的优劣有多种衡量方法，常用的是支持度和置信度<br>如下的代码是展示如何求“如果顾客购买了苹果，他们也会国脉香蕉” 的支持度和可信度<br>数据中第三列表示是否购买苹果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">num_apple_purchases=0</span><br><span class="line">for sample in X:</span><br><span class="line">    if sample[3]==1:</span><br><span class="line">        num_apple_purchases+=1</span><br><span class="line">print(&quot;&#123;0&#125; people bought Apples&quot;.format(num_apple_purchases))</span><br></pre></td></tr></table></figure></p>
+<p>运行结果显示26人购买苹果</p>
+<h6 id="接下来的代码展示计算所有规则的置信度"><a href="#接下来的代码展示计算所有规则的置信度" class="headerlink" title="接下来的代码展示计算所有规则的置信度"></a>接下来的代码展示计算所有规则的置信度</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">from collections import defaultdict</span><br><span class="line">valid_rules=defaultdict(int)</span><br><span class="line">invalid_rules=defaultdict(int)</span><br><span class="line">num_occurances=defaultdict(int)</span><br><span class="line"># 计算过程使用循环结构对样本的每个特征值进行处理</span><br><span class="line">for sample in X:</span><br><span class="line">    for premise in range(n_features):</span><br><span class="line">        if sample[premise]==0:    #判断是否满足条件</span><br><span class="line">            continue</span><br><span class="line">        num_occurances[premise]+=1</span><br><span class="line">        for conclusion in range(n_features):  #如果对应的规则应验，键为条件，规则的的元组加一</span><br><span class="line">        #反之违反规则加一</span><br><span class="line">            if premise==conclusion:</span><br><span class="line">                continue</span><br><span class="line">            if sample[conclusion]==1:</span><br><span class="line">                valid_rules[(premise,conclusion)]+=1</span><br><span class="line">            else:</span><br><span class="line">                invalid_rules[(premise,conclusion)]+=1</span><br><span class="line">support=valid_rules</span><br><span class="line">confidence=defaultdict(float)</span><br><span class="line">#计算每个规则对应的置信度</span><br><span class="line">for premise,conclusion in valid_rules.keys():</span><br><span class="line">    rule=(premise,conclusion)</span><br><span class="line">    confidence[rule]=valid_rules[rule]/num_occurances[premise]</span><br></pre></td></tr></table></figure>
+<p>这样我们便得到了每个规则所对应的置信度和支持度<br>打印每个规则所对应的置信度和支持度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def print_rule(premise,conclusion,support,confidence,features):</span><br><span class="line">    premise_name=features[premise]</span><br><span class="line">    conclusion_name=features[conclusion]</span><br><span class="line">    print(&quot;Rule: If a person buys &#123;0&#125; they will also buy&#123;1&#125;&quot;.format(premise_name,conclusion_name))</span><br><span class="line">    print(&quot; - Support: &#123;0&#125;&quot;.format(support[(premise,conclusion)]))</span><br><span class="line">    print(&quot; - Confidence: &#123;0:.3f&#125;&quot;.format(confidence[(premise,conclusion)]))</span><br></pre></td></tr></table></figure></p>
+<p>现在显示如果一个顾客购买苹果，那么他很有可能购买香蕉的置信度和支持度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">premise=1</span><br><span class="line">conclusion=3</span><br><span class="line">print_rule(premise,conclusion,support,confidence,features)</span><br></pre></td></tr></table></figure></p>
+<p>结果如下<br><img src="https://img-blog.csdnimg.cn/20190327162717302.png" alt="在这里插入图片描述"></p>
+<h4 id="3、找出最佳的排序规则"><a href="#3、找出最佳的排序规则" class="headerlink" title="3、找出最佳的排序规则"></a>3、找出最佳的排序规则</h4><p>为了找到支持度最高的规则，首先对支持度字典进行排序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from operator import itemgetter</span><br><span class="line">sorted_support=sorted(support.items(),key=itemgetter(1),reverse=True)</span><br><span class="line">#按照支持度降序排序</span><br></pre></td></tr></table></figure></p>
+<p>输出支持度最高的前五条规则<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for index in range(5):</span><br><span class="line">    print(&quot;Rule #&#123;0&#125;&quot;.format(index+1))</span><br><span class="line">    premise,conclusion=sorted_support[index][0]</span><br><span class="line">    print_rule(premise,conclusion,support,confidence,features)</span><br></pre></td></tr></table></figure></p>
+<p>结果如下<br><img src="https://img-blog.csdnimg.cn/20190327163339629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW5nZHkxMjMwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>同理，查找置信度最高的前五条规则<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sorted_confidence=sorted(confidence.items(),key=itemgetter(1),reverse=True)</span><br><span class="line">for index in range(5):</span><br><span class="line">    print(&quot;Rule #&#123;0&#125;&quot;.format(index+1))</span><br><span class="line">    premise,conclusion=sorted_confidence[index][0]</span><br><span class="line">    print_rule(premise,conclusion,support,confidence,features)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://img-blog.csdnimg.cn/20190327163603751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3poYW5nZHkxMjMwNw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h6 id="如果我是超市的老板的话，那么我肯定会按照以上规则对商品进行排序"><a href="#如果我是超市的老板的话，那么我肯定会按照以上规则对商品进行排序" class="headerlink" title="如果我是超市的老板的话，那么我肯定会按照以上规则对商品进行排序"></a>如果我是超市的老板的话，那么我肯定会按照以上规则对商品进行排序</h6><h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>由于不经常用python语言，导致有时对代码的理解比较困难，也没有见过python那么多的奇技淫巧，呜呼哀哉，好好学习吧</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/03/31/Spring事务管理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          Spring事务管理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/31/csdn-export-md/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MyBatis的关系映射——多对多</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="Python数据挖掘入门与实践-亲和性分析" data-title="Python数据挖掘入门与实践--亲和性分析" data-url="http://yoursite.com/2019/03/31/Python数据挖掘入门与实践-亲和性分析/"  data-images="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1539877444364&amp;di=194ef2ced171f80307eb7c974f561646&amp;imgtype=0&amp;src=http%3A%2F%2Fimgm.gmw.cn%2Fattachement%2Fjpg%2Fsite2%2F20180922%2F125902468397287372.jpg" data-content="Python数据挖掘入门与实践--亲和性分析">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2019 #include&lt;deng&gt;
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>
